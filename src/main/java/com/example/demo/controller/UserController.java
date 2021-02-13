@@ -22,7 +22,7 @@ public class UserController {
 
     @GetMapping
     public String showInfo() {
-        return "<h1>This is vacancy diary</h1><h2>Please, read <a href=\"https://github.com/evvhenii/VacancyRepository\">READMI</a></h2>";
+        return "<h1>This is vacancy diary</h1><h2>Please, read <a target=\"_blank\" href=\"https://github.com/evvhenii/VacancyRepository\">README</a></h2>";
     }
 
     @PostMapping("/register")
