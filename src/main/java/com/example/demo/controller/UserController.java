@@ -20,8 +20,14 @@ public class UserController {
     private final JwtProvider jwtProvider;
     private final ModelMapper modelMapper;
 
+    @GetMapping
+    public String showInfo() {
+        return "<h1>This is vacancy diary</h1><h2>Please, read <a href=\"https://github.com/evvhenii/VacancyRepository\">READMI</a></h2>";
+    }
+
     @PostMapping("/register")
     public ResponseEntity<String> registerUser(@RequestBody CreateProfileRequest createProfileRequest) {
+        log.info("Handling user registration");
         User user = modelMapper.map(createProfileRequest, User.class);
         userService.saveUser(user);
         return ResponseEntity.ok().build();
@@ -29,6 +35,7 @@ public class UserController {
 
     @PostMapping("/auth")
     public ResponseEntity<AuthResponse> authenticateUser(@RequestBody AuthRequest request) {
+        log.info("Handling authorization user");
         User user = userService.findByEmailAndPassword(request.getEmail(), request.getPassword());
         String token = jwtProvider.generateToken(user.getId());
         return ResponseEntity.ok(new AuthResponse(token));
