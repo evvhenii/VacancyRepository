@@ -1,6 +1,6 @@
 # Vacancy Diary
 
-### How to run
+## How to run
 
 Note that the application will be connected to PostgreSQL instance
 
@@ -12,8 +12,12 @@ $ docker run -p 8080:8080 papapapam/vacancy-diary
 ```
 Now the aplication is available on localhost:8080
 
-### The application is hosted on Heroku
+###Demo user with created vacancies:
+####Login: test@mail.com
+####Password: test
 
-[Link](https://vacancy-diary.herokuapp.com/)
+## The application is hosted on Heroku
+
+###[Link](https://vacancy-diary.herokuapp.com/)
 
 ### [Documentation](https://app.swaggerhub.com/apis/evvhenii/VacancyDiary/)
