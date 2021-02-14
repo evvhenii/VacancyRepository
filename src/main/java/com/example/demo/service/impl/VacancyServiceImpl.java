@@ -1,9 +1,8 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.entity.Status;
-import com.example.demo.entity.User;
 import com.example.demo.entity.Vacancy;
-import com.example.demo.exception.PermittedActionException;
+import com.example.demo.exception.NotPermittedActionException;
 import com.example.demo.exception.UserNotFoundException;
 import com.example.demo.exception.VacancyNotFoundException;
 import com.example.demo.repository.VacancyRepository;
@@ -58,7 +57,7 @@ public class VacancyServiceImpl implements VacancyService {
     }
 
     @Override
-    public void updateVacancy(Vacancy vacancy, int vacancyId) throws UserNotFoundException, VacancyNotFoundException, PermittedActionException {
+    public void updateVacancy(Vacancy vacancy, int vacancyId) throws UserNotFoundException, VacancyNotFoundException, NotPermittedActionException {
         vacancy.setId(vacancyId);
 
         int currentUserId = getUserIdFromSession();
@@ -67,7 +66,7 @@ public class VacancyServiceImpl implements VacancyService {
         Optional<Vacancy> optOldVacancyVersion = findById(vacancyId);
         Vacancy oldVacancyVersion = optOldVacancyVersion.orElseThrow(VacancyNotFoundException::new);
         int vacancyOwnerId = oldVacancyVersion.getUser().getId();
-        if (vacancyOwnerId != currentUserId) throw new PermittedActionException();
+        if (vacancyOwnerId != currentUserId) throw new NotPermittedActionException();
 
         if(oldVacancyVersion.getStatus() == vacancy.getStatus()){
             vacancy.setRequestDate(oldVacancyVersion.getRequestDate());

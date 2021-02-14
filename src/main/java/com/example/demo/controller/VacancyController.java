@@ -5,7 +5,7 @@ import com.example.demo.dto.UpdateVacancyRequest;
 import com.example.demo.dto.VacancyResponse;
 import com.example.demo.entity.Status;
 import com.example.demo.entity.Vacancy;
-import com.example.demo.exception.PermittedActionException;
+import com.example.demo.exception.NotPermittedActionException;
 import com.example.demo.exception.UserNotFoundException;
 import com.example.demo.exception.VacancyNotFoundException;
 import com.example.demo.service.VacancyService;
@@ -16,7 +16,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,7 +34,7 @@ public class VacancyController {
             vacancyService.createVacancy(vacancy);
             return ResponseEntity.ok().build();
         } catch(UserNotFoundException ex){
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User is not found", ex);
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "This user was deleted", ex);
         }
     }
 
@@ -85,10 +84,10 @@ public class VacancyController {
             vacancyService.updateVacancy(vacancy, vacancyId);
             return ResponseEntity.ok().build();
         } catch(UserNotFoundException ex){
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User is not found", ex);
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "This user was deleted", ex);
         } catch(VacancyNotFoundException ex){
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Vacancy is not found", ex);
-        } catch(PermittedActionException ex){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Vacancy is not found", ex);
+        } catch(NotPermittedActionException ex){
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Action is permitted", ex);
         }
     }

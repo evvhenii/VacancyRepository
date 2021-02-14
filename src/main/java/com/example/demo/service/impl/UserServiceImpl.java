@@ -2,7 +2,6 @@ package com.example.demo.service.impl;
 
 import java.security.Principal;
 import java.util.Optional;
-
 import com.example.demo.config.jwt.JwtProvider;
 import com.example.demo.entity.User;
 import com.example.demo.exception.NotAuthenticatedException;
@@ -10,10 +9,8 @@ import com.example.demo.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.UserService;
-
 import javax.servlet.http.HttpServletRequest;
 
 @RequiredArgsConstructor
@@ -23,11 +20,6 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final JwtProvider jwtProvider;
     private final HttpServletRequest httpServletRequest;
-
-    public int getUserIdFromSession(){
-        Principal principal = httpServletRequest.getUserPrincipal();
-        return Integer.parseInt(principal.getName());
-    }
 
 	@Override
     public void deleteUser() {
@@ -57,14 +49,6 @@ public class UserServiceImpl implements UserService {
         return optUser.orElseThrow(UserNotFoundException::new);
     }
 
-    public Optional<User> findById(int userId) {
-		return userRepository.findById(userId);
-    }
-
-    public Optional<User> findByEmail(String email) {
-        return userRepository.findByEmail(email);
-    }
-
     @Override
     public User saveUser(User user) {
     	user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -80,4 +64,18 @@ public class UserServiceImpl implements UserService {
 		}
 		return null;
 	}
+
+    public Optional<User> findById(int userId) {
+        return userRepository.findById(userId);
+    }
+
+    public Optional<User> findByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
+    public int getUserIdFromSession(){
+        Principal principal = httpServletRequest.getUserPrincipal();
+        return Integer.parseInt(principal.getName());
+    }
+
 }

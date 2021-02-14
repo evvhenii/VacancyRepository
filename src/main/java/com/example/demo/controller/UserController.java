@@ -25,6 +25,18 @@ public class UserController {
         return "<h1>This is vacancy diary</h1><h2>Please, read <a target=\"_blank\" href=\"https://github.com/evvhenii/VacancyRepository\">README</a></h2>";
     }
 
+    @GetMapping("/my_profile")
+    public ResponseEntity<GetProfileResponse> showProfile() {
+        log.info("Handling get user information request");
+        try{
+            User user = userService.getCurrentUser();
+            GetProfileResponse userProfile = modelMapper.map(user, GetProfileResponse.class);
+            return ResponseEntity.ok(userProfile);
+        } catch(UserNotFoundException ex){
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Bad credentials", ex);
+        }
+    }
+
     @PostMapping("/register")
     public ResponseEntity<String> registerUser(@RequestBody CreateProfileRequest createProfileRequest) {
         log.info("Handling user registration");
@@ -36,7 +48,6 @@ public class UserController {
     @PostMapping("/auth")
     public ResponseEntity<AuthResponse> authenticateUser(@RequestBody AuthRequest request) {
         log.info("Handling authorization user");
-
         try{
             AuthResponse authResponse = new AuthResponse(userService.authenticate(request.getEmail(), request.getPassword()));
             return ResponseEntity.ok(authResponse);
@@ -51,19 +62,6 @@ public class UserController {
         User user = modelMapper.map(updateProfileRequest, User.class);
         userService.updateUser(user);
         return ResponseEntity.ok().build();
-    }
-
-    @GetMapping("/my_profile")
-    public ResponseEntity<GetProfileResponse> showProfile() {
-        log.info("Handling get user information request");
-        try{
-            User user = userService.getCurrentUser();
-            GetProfileResponse userProfile = modelMapper.map(user, GetProfileResponse.class);
-            return ResponseEntity.ok(userProfile);
-        } catch(UserNotFoundException ex){
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Prove credentials", ex);
-        }
-
     }
 
     @DeleteMapping("/my_profile")
